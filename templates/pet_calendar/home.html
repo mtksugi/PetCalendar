@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load mathfilters %}
+{% block title %}トップページ　カレンダー{% endblock %}
+{% block content %}
+<h1>トップページ　カレンダー</h1>
+
+<table>
+    <thead>
+        <td>月</td>
+        <td>火</td>
+        <td>水</td>
+        <td>木</td>
+        <td>金</td>
+        <td>土</td>
+        <td>日</td>
+    </thead>
+    <tbody>
+        <tr>
+            {% for day in first_weekday_range %}
+            <td></td>
+            {% endfor %}
+            {% for day in days_in_month %}
+            {% if forloop.counter > 1 and day|add:first_weekday|escape|mod:7 == 1 %}
+            <tr>
+            {% endif %}
+                <td>{{ day }}</td>
+            {% if day|add:first_weekday|escape|mod:7 == 0 %}
+            </tr>
+            {% endif %}
+            {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}登録ペット一覧{% endblock %}
+{% block content %}
+<a class="btn bth-primary" href="{% url 'accounts:regist_pet' %}">ペットの追加</a>
+{% for object in object_list %}
+<p>{{ object.name }} ちゃん</p>
+<p>{{ object.birthday }} 生まれ</p>
+<p>{{ object.comment|linebreaks }}</p>
+
+<a class="btn bth-primary" href="{% url 'accounts:update_pet' object.id %}">この情報を修正する</a>
+<hr>
+{% endfor %}
+{% endblock %}
