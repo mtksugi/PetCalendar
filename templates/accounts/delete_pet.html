@@ -3,6 +3,7 @@
 {% block content %}
 <form method="POST">
    {% csrf_token %}
+   <p> {{ pet.name }} ちゃんを削除しますか？ </p>
    <input class="btn btn-danger" type="submit" value="削除する">
 </form>
 {% endblock %}

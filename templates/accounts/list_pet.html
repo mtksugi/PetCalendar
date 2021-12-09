@@ -1,13 +1,19 @@
 {% extends 'base.html' %}
 {% block title %}登録ペット一覧{% endblock %}
 {% block content %}
-<a class="btn bth-primary" href="{% url 'accounts:regist_pet' %}">ペットの追加</a>
+<a class="btn bth-primary" href="{% url 'accounts:regist_pet' %}" role="button">ペットを追加する</a>
+<div>
 {% for object in object_list %}
+{% if object.picture %}
+  <img width="200px" src="{{ object.picture.url }}">
+{% endif %}
 <p>{{ object.name }} ちゃん</p>
 <p>{{ object.birthday }} 生まれ</p>
 <p>{{ object.comment|linebreaks }}</p>
 
-<a class="btn bth-primary" href="{% url 'accounts:update_pet' object.id %}">この情報を修正する</a>
+<a class="btn bth-primary" href="{% url 'accounts:update_pet' object.id %}" role="button">この情報を修正する</a>
+<a class="btn bth-primary" href="{% url 'accounts:delete_pet' object.id %}" role="button">この情報を削除する</a>
 <hr>
 {% endfor %}
+</div>
 {% endblock %}
