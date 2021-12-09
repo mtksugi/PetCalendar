@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load mathfilters %}
+{% load calendar_tags %} 
+{% block title %}トップページ　カレンダー{% endblock %}
+{% block content %}
+<h1>トップページ　カレンダー</h1>
+
+<table>
+    <thead>
+        <td class="col-1">月</td>
+        <td class="col-1">火</td>
+        <td class="col-1">水</td>
+        <td class="col-1">木</td>
+        <td class="col-1">金</td>
+        <td class="col-1">土</td>
+        <td class="col-1">日</td>
+    </thead>
+    <tbody>
+        <tr>
+            {% for day in first_weekday_range %}
+            <td></td>
+            {% endfor %}
+            {% for day in days_in_month %}
+            {% if forloop.counter > 1 and day|add:first_weekday|escape|mod:7 == 1 %}
+            <tr>
+            {% endif %}
+                <td>
+                    {{ day }}
+                    {% if pet_list|pet_exists:day %}
+                        <img width="50px" src="{{ pet_list|get_pet_picture_url:day }}">
+                    {% endif %}
+                </td>
+            {% if day|add:first_weekday|escape|mod:7 == 0 %}
+            </tr>
+            {% endif %}
+            {% endfor %}
+    </tbody>
+</table>
+<a class="btn bth-primary" href="{% url 'pet_calendar:before_month' year month %}" role="button">前月</a>
+<a class="btn bth-primary" href="{% url 'pet_calendar:next_month'  year month %}" role="button">翌月</a>
+{% endblock %}
