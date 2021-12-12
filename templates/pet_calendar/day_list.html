@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 {% load accounts_tags %} 
-{% block title %}登録ペット一覧{% endblock %}
-{% block head1 %}登録ペット一覧{% endblock %}
+{% block title %}誕生日ペット一覧{% endblock %}
+{% block head1 %}{{ month }}月{{ day }}日が誕生日のペットたち{% endblock %}
 {% block content %}
-<a class="btn btn-secondary m-2" href="{% url 'accounts:regist_pet' %}" role="button">ペットを追加する</a>
 <div>
-
 {% for object in object_list %}
 
 <div class="card mb-3" style="max-width: 540px;">
@@ -21,8 +19,6 @@
         <p class="card-text">{{ object.gender|gender_name }}</p>
         <p class="card-text">{{ object.birthday }} 生まれ</p>
         <p class="card-text">{{ object.comment|linebreaks }}</p>
-        <a class="btn btn-secondary m-2" href="{% url 'accounts:update_pet' object.id %}" role="button">この情報を修正する</a>
-        <a class="btn btn-secondary m-2" href="{% url 'accounts:delete_pet' object.id %}" role="button">この情報を削除する</a>
       </div>
     </div>
   </div>

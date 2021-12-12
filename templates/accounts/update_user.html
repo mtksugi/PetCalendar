@@ -1,9 +1,41 @@
 {% extends 'base.html' %}
 {% block title %}会員情報修正{% endblock %}
+{% block head1 %}会員情報修正{% endblock %}
 {% block content %}
 <form method="POST">
    {% csrf_token %}
-   {{ form.as_p }}
-   <input class="btn btn-primary" type="submit" value="修正する">
+   <div class="mb-3">
+      {{ form.username.errors }}
+      <label for="{{ form.username.id_for_label }}" class="form-label">飼い主様の苗字</label>
+      {{ form.username }}
+   </div>
+
+   <div class="mb-3">
+      {{ form.zip_code.errors }}
+      <label for="{{ form.zip_code.id_for_label }}" class="form-label">郵便番号</label>
+      {{ form.zip_code }}
+   </div>
+   <div class="mb-3">
+      {{ form.address1.errors }}
+      <label for="{{ form.address1.id_for_label }}" class="form-label">住所</label>
+      {{ form.address1 }}
+   </div>
+   <div class="mb-3">
+      {{ form.address2.errors }}
+      <label for="{{ form.address2.id_for_label }}" class="form-label">番地</label>
+      {{ form.address2 }}
+   </div>
+   <div class="mb-3">
+      {{ form.address3.errors }}
+      <label for="{{ form.address3.id_for_label }}" class="form-label">方書</label>
+      {{ form.address3 }}
+   </div>
+   <div class="mb-3">
+      {{ form.phone_number.errors }}
+      <label for="{{ form.phone_number.id_for_label }}" class="form-label">電話番号</label>
+      {{ form.phone_number }}
+   </div>
+
+   <input class="btn btn-secondary" type="submit" value="修正する">
 </form>
 {% endblock %}

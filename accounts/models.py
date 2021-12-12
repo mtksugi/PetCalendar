@@ -63,7 +63,7 @@ class Pets(models.Model):
     birthday = models.DateField(verbose_name="誕生日")
     birthday_month = models.PositiveIntegerField(verbose_name="誕生日の月")
     birthday_day = models.PositiveIntegerField(verbose_name="誕生日の日付")
-    picture = models.FileField(blank=True, upload_to='pet/', verbose_name="画像")
+    picture = models.FileField(upload_to='pet/', verbose_name="画像")   # 画像が表示されなければ意味がないので登録必須
     comment = models.CharField(max_length=1000, blank=True)
     user = models.ForeignKey(
         'Users', on_delete=models.CASCADE

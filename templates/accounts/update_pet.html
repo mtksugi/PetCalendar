@@ -1,9 +1,35 @@
 {% extends 'base.html' %}
 {% block title %}ペット情報修正{% endblock %}
+{% block head1 %}ペット情報修正{% endblock %}
 {% block content %}
 <form method="POST" enctype="multipart/form-data">
    {% csrf_token %}
-   {{ form.as_p }}
-   <input class="btn btn-primary" type="submit" value="修正する">
+   <div class="mb-3">
+      {{ form.name.errors }}
+      <label for="{{ form.name.id_for_label }}" class="form-label">ペットの名前</label>
+      {{ form.name }}
+   </div>
+   <div class="mb-3">
+      {{ form.gender.errors }}
+      <label for="{{ form.gender.id_for_label }}" class="form-label">性別</label>
+      {{ form.gender }}
+   </div>
+   <div class="mb-3">
+      {{ form.birthday.errors }}
+      <label for="{{ form.birthday.id_for_label }}" class="form-label">誕生日</label>
+      {{ form.birthday }}
+   </div>
+   <div class="mb-3">
+      {{ form.picture.errors }}
+      <label for="{{ form.picture.id_for_label }}" class="form-label">写真</label>
+      {{ form.picture }}
+   </div>
+
+   <div class="mb-3">
+      {{ form.comment.errors }}
+      <label for="{{ form.comment.id_for_label }}" class="form-label">アピールコメント</label>
+      {{ form.comment }}
+   </div>
+   <input class="btn btn-secondary" type="submit" value="修正する">
 </form>
 {% endblock %}

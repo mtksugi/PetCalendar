@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load mathfilters %}
 {% load calendar_tags %} 
-{% block title %}トップページ　カレンダー{% endblock %}
+{% block title %}ペットカレンダー{% endblock %}
+{% block head1 %}カレンダー{% endblock %}
 {% block content %}
-<h1>トップページ　カレンダー</h1>
 
-<table>
+<table class="table">
     <thead>
         <td class="col-1">月</td>
         <td class="col-1">火</td>
@@ -25,9 +25,14 @@
             <tr>
             {% endif %}
                 <td>
-                    {{ day }}
                     {% if pet_list|pet_exists:day %}
-                        <img width="50px" src="{{ pet_list|get_pet_picture_url:day }}">
+                        <a href="{% url 'pet_calendar:day_list' month day %}">{{ day }}</a>
+                        {% if pet_list|get_pet_picture_url:day %}
+                            <img width="50px" src="{{ pet_list|get_pet_picture_url:day }}">
+                        {% endif %}
+                        {{ pet_count_list|get_pet_count:day }}
+                    {% else %}
+                        {{ day }}
                     {% endif %}
                 </td>
             {% if day|add:first_weekday|escape|mod:7 == 0 %}
@@ -36,6 +41,6 @@
             {% endfor %}
     </tbody>
 </table>
-<a class="btn bth-primary" href="{% url 'pet_calendar:before_month' year month %}" role="button">前月</a>
-<a class="btn bth-primary" href="{% url 'pet_calendar:next_month'  year month %}" role="button">翌月</a>
+<a class="btn btn-secondary" href="{% url 'pet_calendar:before_month' year month %}" role="button">前月</a>
+<a class="btn btn-secondary" href="{% url 'pet_calendar:next_month'  year month %}" role="button">翌月</a>
 {% endblock %}
