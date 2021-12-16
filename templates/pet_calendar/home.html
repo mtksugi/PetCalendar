@@ -5,6 +5,7 @@
 {% block head1 %}カレンダー{% endblock %}
 {% block content %}
 
+<form method="GET" id="ajax-get-birthday-pets">
 <table class="table">
     <thead>
         <td class="col-1">月</td>
@@ -27,6 +28,7 @@
                 <td>
                     {% if pet_list|pet_exists:day %}
                         <a href="{% url 'pet_calendar:day_list' month day %}">{{ day }}</a>
+                        <a href="#" name="birthday-pets">{{ day }}</a>
                         {% if pet_list|get_pet_picture_url:day %}
                             <img width="50px" src="{{ pet_list|get_pet_picture_url:day }}">
                         {% endif %}
@@ -43,4 +45,86 @@
 </table>
 <a class="btn btn-secondary" href="{% url 'pet_calendar:before_month' year month %}" role="button">前月</a>
 <a class="btn btn-secondary" href="{% url 'pet_calendar:next_month'  year month %}" role="button">翌月</a>
+</form>
+<div id="day-list">
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    document.getElementById('ajax-get-birthday-pets').addEventListener('click', e => {
+        if (e.target.name != 'birthday-pets') return;
+        // デフォルトのイベントをキャンセルし、ページ遷移しないように!
+        e.preventDefault();
+
+        const month = {{ month }};
+        const day = e.target.text;
+
+        const url = `{% url "pet_calendar:ajax_get_birthday_pets" %}?month=${month}&day=${day}`;
+        const post_area = document.getElementById('day-list');
+        //create gender dictionary
+        const gender_map = new Map([[1,'オス'], [2,'メス'], [3,'性別不明']]);
+        const date_options = { year: 'numeric', month: 'long', day: 'numeric' };
+
+        fetch(url)
+            .then(response => {
+                return response.json();
+            }).then(response => {
+                post_area.innerHTML = '';
+                for(const pet of response){
+                    //card
+                    const div_card = document.createElement('div');
+                    div_card.className = "card mb-3";
+                    //row
+                    const div_row = document.createElement('div');
+                    div_row.className = "row g-0";
+                    div_card.appendChild(div_row);
+                    //picture area
+                    const div_col_1 = document.createElement('div');
+                    div_col_1.className = "col-md-5";
+                    const img_picture = document.createElement('img');
+                    img_picture.className = "img-fluid rounded";
+                    img_picture.src = pet["media_url"] + pet.fields["picture"];
+                    div_col_1.appendChild(img_picture);
+                    div_row.appendChild(div_col_1);
+                    //non picture
+                    const div_col_2 = document.createElement('div');
+                    div_col_2.className = "col-md-7";
+                    //card body
+                    const div_card_body = document.createElement('div');
+                    div_card_body.className = "card-body";
+                    div_col_2.appendChild(div_card_body);
+                    //name
+                    const h5_name = document.createElement('h5');
+                    h5_name.className = "card-title";
+                    h5_name.textContent = pet.fields["name"] + "ちゃん";
+                    div_card_body.appendChild(h5_name);
+                    //gender
+                    const p_gender = document.createElement('p');
+                    p_gender.className = "card-text";
+                    p_gender.textContent = gender_map.get(pet.fields["gender"]);
+                    div_card_body.appendChild(p_gender);
+                    //birthday
+                    const p_birthday = document.createElement('p');
+                    p_birthday.className = "card-text";
+                    const birthday_date = new Date(pet.fields["birthday"]);
+                    p_birthday.textContent = birthday_date.toLocaleDateString(undefined, date_options) + "生まれ";
+                    div_card_body.appendChild(p_birthday);
+                    //comment
+                    const p_comment = document.createElement('p');
+                    p_comment.className = "card-text";
+                    p_comment.textContent = pet.fields["comment"];
+                    div_card_body.appendChild(p_comment);
+                    div_row.appendChild(div_col_2);
+                    
+                    post_area.appendChild(div_card);
+
+                }
+        }).catch(error => {
+            console.log(error);
+        });
+    });
+    //# sourceURL=http://debug/test.js
+</script>
 {% endblock %}
