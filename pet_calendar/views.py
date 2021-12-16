@@ -1,4 +1,5 @@
-from django.http import request
+from django.http import request, JsonResponse
+from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView, RedirectView
 from django.views.generic.list import ListView
@@ -6,6 +7,10 @@ from django.urls import reverse_lazy
 from accounts.models import Pets
 import calendar, datetime
 from random import shuffle
+from django.core.serializers import serialize
+import json
+from django.conf import settings
+from django.db.models import Value
 
 class HomeView(TemplateView):
     template_name = 'pet_calendar/home.html'
@@ -82,3 +87,39 @@ class DayListView(ListView):
         day = self.kwargs['day']
         query_set = Pets.objects.filter(birthday_month=month, birthday_day=day)
         return query_set
+
+def ajax_get_birthday_pets(request):
+    month = request.GET.get('month')
+    day = request.GET.get('day')
+    pets = Pets.objects.filter(birthday_month=month, birthday_day=day).all()
+    # うまい手がなさそうなので、model -> json string -> list -> add media_url -> json string というややこしいことをしている...
+    pets_json = serialize('json', pets)
+    # pets.pictureには'/media/'が入ってない. html側でmedia表示するため、MEDIA_URLをjsonに追加
+    pets_list = json.loads(pets_json)
+    dic = {'media_url': settings.MEDIA_URL}
+    for pet_dic in pets_list:
+        pet_dic.update(dic)
+
+    pets_json = json.dumps(pets_list)
+    return HttpResponse(pets_json, content_type='application/json')
+
+    # pets = Pets.objects.filter(birthday_month=month, birthday_day=day).annotate(media_url=Value(settings.MEDIA_URL)).all()
+    # # print(pets, pets[0].name, pets[0].picture, pets[0].media_url)
+    # print(type(pets), type(pets[0]))
+    # pets_json = serialize('json', pets)
+    # print(pets_json)
+    # return HttpResponse(pets_json, content_type='application/json')
+
+    # pets = Pets.objects.filter(birthday_month=month, birthday_day=day).all().values()
+    # print(type(pets))
+    # print(type(pets[0]))
+    # pets_list = []
+    # dic = {'media_url': settings.MEDIA_URL}
+    # for pet_dic in pets:
+    #     pet_dic.update(dic)
+    #     pets_list.append(pet_dic)
+
+    # # pets_json = serialize('json', pets)
+    # print(pets_list)
+    # pets_json = json.dumps(pets_list)
+    # return HttpResponse(pets_json, content_type='application/json')
