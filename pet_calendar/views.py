@@ -51,7 +51,7 @@ class BeforeMonthView(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         year = kwargs.get('year')
         month = kwargs.get('month')
-        # before month = firstday - 1
+        # before month -> firstday - 1
         firstday = datetime.date(year, month, 1)
         lastday = firstday + datetime.timedelta(days=-1)
         return reverse_lazy('pet_calendar:home', kwargs={'year':lastday.year, 'month':lastday.month})
@@ -61,7 +61,7 @@ class NextMonthView(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         year = kwargs.get('year')
         month = kwargs.get('month')
-        # next month = lastday + 1
+        # next month -> lastday + 1
         mr = calendar.monthrange(year,month)
         lastday = datetime.date(year, month, mr[1])
         firstday = lastday + datetime.timedelta(days=1)
