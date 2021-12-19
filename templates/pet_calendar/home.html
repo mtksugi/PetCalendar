@@ -5,34 +5,47 @@
 {% block head1 %}カレンダー{% endblock %}
 {% block content %}
 
+<div class="d-flex justify-content-between">
+    <a class="btn btn-secondary" href="{% url 'pet_calendar:before_month' year month %}" role="button">前月</a>
+    <div class="p-1">{{ year }}年{{ month }}月</div>
+    <a class="btn btn-secondary" href="{% url 'pet_calendar:next_month'  year month %}" role="button">翌月</a>
+</div>
 <form method="GET" id="ajax-get-birthday-pets">
-<table class="table">
+<table class="table calendar">
     <thead>
-        <td class="col-1">月</td>
-        <td class="col-1">火</td>
-        <td class="col-1">水</td>
-        <td class="col-1">木</td>
-        <td class="col-1">金</td>
-        <td class="col-1">土</td>
-        <td class="col-1">日</td>
+        <th>月</th>
+        <th>火</th>
+        <th>水</th>
+        <th>木</th>
+        <th>金</th>
+        <th><div class="calendar-saturday">土</div></th>
+        <th><div class="calendar-sunday">日</div></th>
     </thead>
     <tbody>
-        <tr>
+        <tr class="calendar-tr">
             {% for day in first_weekday_range %}
             <td></td>
             {% endfor %}
             {% for day in days_in_month %}
             {% if forloop.counter > 1 and day|add:first_weekday|escape|mod:7 == 1 %}
-            <tr>
+            <tr class="calendar-tr">
             {% endif %}
+            {% if day|add:first_weekday|escape|mod:7 == 6 %}
+                <td class="calendar-saturday">
+            {% elif day|add:first_weekday|escape|mod:7 == 0 %}
+                <td class="calendar-sunday">
+            {% else %}
                 <td>
+            {% endif %}
                     {% if pet_list|pet_exists:day %}
-                        <a href="{% url 'pet_calendar:day_list' month day %}">{{ day }}</a>
-                        <a href="#" name="birthday-pets">{{ day }}</a>
-                        {% if pet_list|get_pet_picture_url:day %}
-                            <img width="50px" src="{{ pet_list|get_pet_picture_url:day }}">
-                        {% endif %}
-                        {{ pet_count_list|get_pet_count:day }}
+                        <div onclick="birthday_pets({{ day }})">
+                            {{ day }}
+                            <div class="regist-img">
+                            {% load static %}
+                            <img src="{% static 'image/nikukyuu_40x40.png' %}" alt="">
+                            </div>
+                            <div class="regist-number">({{ pet_count_list|get_pet_count:day }})</div>
+                        </div>
                     {% else %}
                         {{ day }}
                     {% endif %}
@@ -43,8 +56,6 @@
             {% endfor %}
     </tbody>
 </table>
-<a class="btn btn-secondary" href="{% url 'pet_calendar:before_month' year month %}" role="button">前月</a>
-<a class="btn btn-secondary" href="{% url 'pet_calendar:next_month'  year month %}" role="button">翌月</a>
 </form>
 <div id="day-list">
 
@@ -53,13 +64,16 @@
 
 {% block script %}
 <script>
-    document.getElementById('ajax-get-birthday-pets').addEventListener('click', e => {
-        if (e.target.name != 'birthday-pets') return;
-        // デフォルトのイベントをキャンセルし、ページ遷移しないように!
-        e.preventDefault();
+    // document.getElementById('ajax-get-birthday-pets').addEventListener('click', e => {
+    //     const post_area = document.getElementById('day-list');
+    //     if (e.target.tagName = 'TD') {
+    //         post_area.innerText = '';
+    //     }
+    // });
 
+    function birthday_pets(d){
         const month = {{ month }};
-        const day = e.target.text;
+        const day = d;
 
         const url = `{% url "pet_calendar:ajax_get_birthday_pets" %}?month=${month}&day=${day}`;
         const post_area = document.getElementById('day-list');
@@ -121,10 +135,14 @@
                     post_area.appendChild(div_card);
 
                 }
+                window.scroll({
+                    top:post_area.getBoundingClientRect().top,
+                    behavior:"smooth"
+                });
         }).catch(error => {
             console.log(error);
         });
-    });
+    }
     //# sourceURL=http://debug/test.js
 </script>
 {% endblock %}
