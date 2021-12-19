@@ -1,3 +1,42 @@
-.card-text{
+.card-text {
     white-space: pre;
+}
+
+.calendar {
+    text-align: center;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.page-h1 {
+    font-size: 1.25rem;
+    border-bottom:1px solid  gray;
+}
+
+.calendar-tr {
+    height: 100px;
+}
+
+.regist-number {
+    font-size: 0.8em;
+    display: flex;
+    justify-content: center;
+    color: initial;
+}
+
+.regist-img {
+    display: flex;
+    justify-content: center;
+}
+
+.birthday-pets-area {
+    background-color: gray;
+}
+
+.calendar-saturday {
+    color: blue;
+}
+
+.calendar-sunday {
+    color: red;
 }

@@ -21,12 +21,13 @@ class RegistUserForm(forms.ModelForm):
         model = Users
         fields = ['username', 'email', 'password', 'zip_code', 'address1', 'address2', 'address3', 'phone_number']
     
-    def clean(self):
+    def clean_confirm_password(self):
         cleaned_data = super().clean()
         password = cleaned_data['password']
         confirm_password = cleaned_data['confirm_password']
         if password != confirm_password:
             raise forms.ValidationError('パスワードが一致しません')
+        return confirm_password
 
     def save(self, commit=False):
         user = super().save(commit=False)
@@ -52,7 +53,42 @@ class UpdateUserForm(forms.ModelForm):
     class Meta:
         model = Users
         fields = ['username', 'zip_code', 'address1', 'address2', 'address3', 'phone_number']
-    
+
+class EmailForm(forms.Form):
+    email = forms.EmailField(label='メールアドレス', widget=forms.EmailInput(attrs={'class':'form-control'}))
+
+    def clean_email(self):
+        cleaned_data = super().clean()
+        email = cleaned_data['email']
+        if not Users.objects.filter(email=email, is_active=True).exists():
+            raise forms.ValidationError('入力されたメールアドレスは会員登録されていません')
+        return email
+
+class ResetPasswordForm(forms.ModelForm):
+
+    password = forms.CharField(label='パスワード', widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    confirm_password = forms.CharField(label='パスワード再入力', widget=forms.PasswordInput(attrs={'class':'form-control'}))
+
+    class Meta:
+        model = Users
+        fields = ['password', ]
+
+    def clean_confirm_password(self):
+        cleaned_data = super().clean()
+        password = cleaned_data['password']
+        confirm_password = cleaned_data['confirm_password']
+        if password != confirm_password:
+            raise forms.ValidationError('パスワードが一致しません')
+        return confirm_password
+
+    def save(self, commit=False):
+        user = super().save(commit=False)
+        user = self.user
+        validate_password(self.cleaned_data['password'], user)
+        user.set_password(self.cleaned_data['password'])
+        user.save()
+        return user
+
 class RegistPetForm(forms.ModelForm):
     name = forms.CharField(max_length=100, label="ペットの名前", widget=forms.TextInput(attrs={'class':'form-control'}))
     gender = forms.ChoiceField(label="性別", choices=(

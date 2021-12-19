@@ -92,10 +92,12 @@ def ajax_get_birthday_pets(request):
     month = request.GET.get('month')
     day = request.GET.get('day')
     pets = Pets.objects.filter(birthday_month=month, birthday_day=day).all()
-    # うまい手がなさそうなので、model -> json string -> list -> add media_url -> json string というややこしいことをしている...
+    # MEDIA_URLをjsonに追加するのにうまい手がなさそうなので、
+    # model -> json string -> list -> add media_url -> json string というややこしいことをしている...
     pets_json = serialize('json', pets)
     # pets.pictureには'/media/'が入ってない. html側でmedia表示するため、MEDIA_URLをjsonに追加
     pets_list = json.loads(pets_json)
+    shuffle(pets_list)
     dic = {'media_url': settings.MEDIA_URL}
     for pet_dic in pets_list:
         pet_dic.update(dic)

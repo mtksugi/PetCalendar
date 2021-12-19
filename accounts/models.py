@@ -3,6 +3,10 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser, PermissionsMixin
 )
 from django.urls import reverse_lazy
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from uuid import uuid4
+from datetime import datetime, timedelta, timezone
 
 
 class UserManager(BaseUserManager):
@@ -51,6 +55,40 @@ class Users(AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = 'users'
         verbose_name_plural = 'ユーザー'
+
+class UserActivateTokensManager(models.Manager):
+
+    def activate_user_by_token(self, token):
+        user_activate_token = self.filter(
+            token=token,
+            expired_at__gte=datetime.now(tz=timezone.utc)
+        ).first()
+        user = user_activate_token.user
+        user.is_active = True
+        user.save()
+
+class UserActivateTokens(models.Model):
+
+    token = models.UUIDField(db_index=True)
+    expired_at = models.DateTimeField()
+    user = models.ForeignKey(
+        'Users', on_delete=models.CASCADE
+    )
+
+    objects = UserActivateTokensManager()
+
+    class Meta:
+        db_table = 'user_activate_tokens'
+        verbose_name_plural = 'ユーザートークン'
+
+    def __str__(self) -> str:
+        return f'{self.user.username} : {self.id}'
+
+# @receiver(post_save, sender=Users)
+# def publish_token(sender, instance, **kwargs):
+#     user_activate_token = UserActivateTokens.objects.create(
+#         user=instance, token=str(uuid4()), expired_at=datetime.now(tz=timezone.utc) + timedelta(days=1)
+#     )
 
 class PetsManager(models.Manager):
 

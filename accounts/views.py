@@ -7,8 +7,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from .forms import RegistUserForm, UpdateUserForm, UserLoginForm, RegistPetForm
-from .models import Pets, Users
+from .forms import EmailForm, RegistUserForm, ResetPasswordForm, UpdateUserForm, UserLoginForm, RegistPetForm
+from .models import Pets, Users, UserActivateTokens
+from uuid import uuid4
+from datetime import datetime, timedelta, timezone
 
 class RegistUserView(CreateView):
     template_name = 'accounts/regist_user.html'
@@ -16,8 +18,86 @@ class RegistUserView(CreateView):
 
     success_url = reverse_lazy('accounts:success_regist')      
 
+    def form_valid(self, form):
+        http_redirect = super().form_valid(form)
+        tokens = UserActivateTokens.objects.create(
+            user=form.instance, token=str(uuid4()), expired_at=datetime.now(tz=timezone.utc) + timedelta(days=1)
+        )
+        # tokens = get_object_or_404(UserActivateTokens, user=form.instance)
+
+        # ---- send mail
+        print(f'views : http://127.0.0.1:8000/accounts/activate_user/{tokens.token}')
+
+
+
+        return http_redirect
+
 class SuccessRegistView(TemplateView):
     template_name = 'accounts/success_regist.html'
+
+class ActivateUserView(TemplateView):
+    template_name = 'accounts/activate_user.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            UserActivateTokens.objects.activate_user_by_token(kwargs['token'])
+        except:
+            context['error'] = True
+        return context
+
+    # def get(self, request, *args, **kwargs):
+    #     try:
+    #         UserActivateTokens.objects.activate_user_by_token(kwargs['token'])
+    #     except:
+    #         message = ''
+    #         print(request)
+    #     return super().get(request, *args, **kwargs)
+
+class ForgotPasswordView(FormView):
+    template_name = 'accounts/forgot_password.html'
+    form_class = EmailForm
+
+    def get_success_url(self):
+        return reverse_lazy('accounts:sendmail_reset_password')
+
+    def form_valid(self, form):
+        email = form.cleaned_data['email']
+        if email:
+            user = get_object_or_404(Users, email=email, is_active=True)    # 存在チェックはform側で実施済
+            tokens = UserActivateTokens.objects.create(
+                user=user, token=str(uuid4()), expired_at=datetime.now(tz=timezone.utc) + timedelta(days=1)
+            )
+            # ---- send mail
+            print(f'views : http://127.0.0.1:8000/accounts/reset_password/{tokens.token}')
+
+        return super().form_valid(form)
+
+class SendmailResetPasswordView(TemplateView):
+    template_name = 'accounts/sendmail_reset_password.html'
+
+class ResetPasswordView(FormView):
+    template_name = 'accounts/reset_password.html'
+    form_class = ResetPasswordForm
+    # success_message = 'パスワードを更新しました. ログインしてください. '
+    success_url = reverse_lazy('accounts:user_login')
+    
+    def get_success_message(self, cleaned_data):
+        return 'パスワードを更新しました. ログインしてください. '
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        token = context['view'].kwargs['token']
+        if not UserActivateTokens.objects.filter(token=token, expired_at__gte=datetime.now(tz=timezone.utc)).exists():
+            context['error'] = True
+        return context
+
+    def form_valid(self, form):
+        token = self.request.POST.get('token')
+        tokens = get_object_or_404(UserActivateTokens, token=token) # ここではあえて有効期限はみなくていいかな...
+        form.user = tokens.user
+        form.save()
+        return super().form_valid(form)
 
 class UserLoginView(LoginView):
     template_name = 'accounts/user_login.html'
