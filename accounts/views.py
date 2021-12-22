@@ -76,7 +76,7 @@ class ForgotPasswordView(FormView):
 class SendmailResetPasswordView(TemplateView):
     template_name = 'accounts/sendmail_reset_password.html'
 
-class ResetPasswordView(FormView):
+class ResetPasswordView(SuccessMessageMixin, FormView):
     template_name = 'accounts/reset_password.html'
     form_class = ResetPasswordForm
     # success_message = 'パスワードを更新しました. ログインしてください. '
