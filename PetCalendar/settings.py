@@ -81,12 +81,6 @@ WSGI_APPLICATION = 'PetCalendar.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
@@ -154,4 +148,8 @@ STATICFILES_DIRS = (
 )
 ## Activate Django-Heroku.
 django_heroku.settings(locals())
+
+## Database
+import dj_database_url
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
