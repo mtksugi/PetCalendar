@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-s#)6j(9txyi$%)euvpy0)z*l%ur)&_!!k07og)%7k6+&z7lz9=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['petcalendar.herokuapp.com']
 
 
 # Application definition
