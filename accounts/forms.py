@@ -2,6 +2,7 @@ from django import forms
 from .models import Pets, Users
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.forms import AuthenticationForm
+import datetime
 
 class RegistUserForm(forms.ModelForm):
     email = forms.EmailField(label='メールアドレス', widget=forms.EmailInput(attrs={'class':'form-control'}))
@@ -102,6 +103,13 @@ class RegistPetForm(forms.ModelForm):
         model = Pets
         fields = ['name', 'gender', 'birthday', 'picture', 'comment',]
     
+    def clean_birthday(self):
+        cleaned_data = super().clean()
+        birthday = cleaned_data['birthday']
+        if birthday > datetime.date.today():
+            raise forms.ValidationError('誕生日が未来日です')
+        return birthday
+
     def save(self):
         pet = super().save(commit=False)
         pet.user = self.user

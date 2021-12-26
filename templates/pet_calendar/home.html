@@ -6,9 +6,9 @@
 {% block content %}
 
 <div class="d-flex justify-content-between">
-    <a class="btn btn-secondary" href="{% url 'pet_calendar:before_month' year month %}" role="button">前月</a>
+    <a class="btn btn-primary" href="{% url 'pet_calendar:before_month' year month %}" role="button">前月</a>
     <div class="p-1">{{ year }}年{{ month }}月</div>
-    <a class="btn btn-secondary" href="{% url 'pet_calendar:next_month'  year month %}" role="button">翌月</a>
+    <a class="btn btn-primary" href="{% url 'pet_calendar:next_month'  year month %}" role="button">翌月</a>
 </div>
 <form method="GET" id="ajax-get-birthday-pets">
 <table class="table calendar">

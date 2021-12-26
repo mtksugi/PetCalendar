@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts',
     'pet_calendar',
     'mathfilters',
+    'import_export',
 ]
 
 AUTH_USER_MODEL = 'accounts.Users'
