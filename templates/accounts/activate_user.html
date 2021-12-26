@@ -6,13 +6,16 @@
 <p>URLに誤りがあるか、URLの有効期限が切れています。</p>
 <p>URLを再度ご確認ください。</p>
 <p>本登録が完了できない場合は、お手数ですがもう一度会員登録からやり直してください。</p>
-<a class="btn btn-secondary m-2" href="{% url 'accounts:regist_user' %}" role="button">会員登録</a>
-
+<div class="d-grid gap-1">
+    <a class="btn btn-primary" href="{% url 'accounts:regist_user' %}" role="button">会員登録</a>
+</div>
 {% else %}
 <p>ユーザーの本登録が完了しました。</p>
 <p>ログインして、ペットの登録をお願いします。</p>
 
-<a class="btn btn-secondary m-2" href="{% url 'accounts:user_login' %}" role="button">ログイン</a>
+<div class="d-grid gap-1">
+    <a class="btn btn-primary" href="{% url 'accounts:user_login' %}" role="button">ログイン</a>
+</div>
 {% endif %}
 
 {% endblock %}

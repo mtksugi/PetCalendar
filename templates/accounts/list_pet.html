@@ -21,8 +21,10 @@
         <p class="card-text">{{ object.gender|gender_name }}</p>
         <p class="card-text">{{ object.birthday }} 生まれ</p>
         <p class="card-text">{{ object.comment|linebreaks }}</p>
+        <div class="d-grid gap-2">
         <a class="btn btn-secondary m-2" href="{% url 'accounts:update_pet' object.id %}" role="button">この情報を修正する</a>
         <a class="btn btn-secondary m-2" href="{% url 'accounts:delete_pet' object.id %}" role="button">この情報を削除する</a>
+        </div>
       </div>
     </div>
   </div>
