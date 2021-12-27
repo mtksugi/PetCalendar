@@ -136,10 +136,11 @@ LOGIN_URL = '/accounts/user_login'
 LOGIN_REDIRECT_URL = '/pet_calendar/home'
 LOGOUT_REDIRECT_URL = '/accounts/user_login'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, ''staticfiles', 'media')
-MEDIA_URL = '/media/'
 
 #　　for heroku
+MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'media')
+MEDIA_URL = '/media/'
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 ## Extra places for collectstatic to find static files.
