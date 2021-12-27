@@ -156,9 +156,9 @@ import dj_database_url
 DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 ## media store
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'hu3zgjxxl',
-    'API_KEY': '119564665227642',
-    'API_SECRET': 'zWnwliNd6bka1YJDDCcUKW4nSJ0',
-}
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': 'hu3zgjxxl',
+#     'API_KEY': '119564665227642',
+#     'API_SECRET': 'zWnwliNd6bka1YJDDCcUKW4nSJ0',
+# }
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
