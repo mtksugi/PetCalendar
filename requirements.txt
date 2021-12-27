@@ -3,8 +3,10 @@ argon2-cffi-bindings==21.2.0
 asgiref==3.4.1
 bcrypt==3.2.0
 cffi==1.15.0
+cloudinary==1.28.0
 dj-database-url==0.5.0
 Django==3.2.10
+django-cloudinary-storage==0.3.0
 django-heroku==0.3.1
 django-mathfilters==1.0.0
 gunicorn==20.1.0
