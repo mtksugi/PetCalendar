@@ -10,32 +10,6 @@
       {{ form.username }}
    </div>
 
-   <div class="mb-3">
-      {{ form.zip_code.errors }}
-      <label for="{{ form.zip_code.id_for_label }}" class="form-label">郵便番号</label>
-      {{ form.zip_code }}
-   </div>
-   <div class="mb-3">
-      {{ form.address1.errors }}
-      <label for="{{ form.address1.id_for_label }}" class="form-label">住所</label>
-      {{ form.address1 }}
-   </div>
-   <div class="mb-3">
-      {{ form.address2.errors }}
-      <label for="{{ form.address2.id_for_label }}" class="form-label">番地</label>
-      {{ form.address2 }}
-   </div>
-   <div class="mb-3">
-      {{ form.address3.errors }}
-      <label for="{{ form.address3.id_for_label }}" class="form-label">マンション・アパート名</label>
-      {{ form.address3 }}
-   </div>
-   <div class="mb-3">
-      {{ form.phone_number.errors }}
-      <label for="{{ form.phone_number.id_for_label }}" class="form-label">電話番号</label>
-      {{ form.phone_number }}
-   </div>
-
    <div class="d-grid gap-1">
       <input class="btn btn-primary mt-3" type="submit" value="修正する">
    </div>
