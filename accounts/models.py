@@ -41,7 +41,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     zip_code = models.CharField(max_length=10, verbose_name="郵便番号", blank=True)
     address1 = models.CharField(max_length=100, verbose_name="住所", blank=True)
     address2 = models.CharField(max_length=100, verbose_name="番地", blank=True)
-    address3 = models.CharField(max_length=200, verbose_name="方書", blank=True)
+    address3 = models.CharField(max_length=200, verbose_name="マンション・アパート名", blank=True)
     phone_number = models.CharField(max_length=20, verbose_name="電話番号", blank=True)
 
     USERNAME_FIELD = 'email'
