@@ -23,3 +23,9 @@ def get_pet_count(pet_count_list, index):
     if pet_count_list[index]:
         return pet_count_list[index]
     return None
+
+@register.filter(name='is_active_navbar')
+def is_active_navbar(current_view, target_view):
+    if current_view == target_view:
+        return "active"
+    return ''
