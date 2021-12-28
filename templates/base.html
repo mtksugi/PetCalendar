@@ -1,3 +1,4 @@
+{% load calendar_tags %} 
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -20,13 +21,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                {% if user.is_authenticated %}
-                <a class="nav-link" href="{% url 'accounts:update_user' user.id %}">会員情報修正</a>
-                <a class="nav-link" href="{% url 'accounts:list_pet' %}">ペットの修正/追加</a>
-                <a class="nav-link" href="{% url 'accounts:user_logout' %}">ログアウト</a>
+              <a class="nav-link {{ request.resolver_match.url_name|is_active_navbar:'home'}}" href="{% url 'pet_calendar:home' %}">ホーム</a>
+              {% if user.is_authenticated %}
+                <a class="nav-link {{ request.resolver_match.url_name|is_active_navbar:'update_user'}}" href="{% url 'accounts:update_user' user.id %}">会員情報修正</a>
+                <a class="nav-link {{ request.resolver_match.url_name|is_active_navbar:'list_pet'}}" href="{% url 'accounts:list_pet' %}">ペットの修正/追加</a>
+                <a class="nav-link {{ request.resolver_match.url_name|is_active_navbar:'user_logout'}}" href="{% url 'accounts:user_logout' %}">ログアウト</a>
                 {% else %}
-                <a class="nav-link" href="{% url 'accounts:regist_user' %}">会員登録</a>
-                <a class="nav-link" href="{% url 'accounts:user_login' %}">ログイン</a>
+                <a class="nav-link {{ request.resolver_match.url_name|is_active_navbar:'regist_user'}}" href="{% url 'accounts:regist_user' %}">会員登録</a>
+                <a class="nav-link {{ request.resolver_match.url_name|is_active_navbar:'user_login'}}" href="{% url 'accounts:user_login' %}">ログイン</a>
                 {% endif %}
             </div>
         </div>

@@ -1,6 +1,7 @@
 from django.http import request, JsonResponse
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
+from django.views import View
 from django.views.generic.base import TemplateView, RedirectView
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy
@@ -10,9 +11,29 @@ from random import shuffle
 from django.core.serializers import serialize
 import json
 from django.conf import settings
-from django.db.models import Value
 
-class HomeView(TemplateView):
+class CheckBaseView(View):
+
+    def get(self, request, *args, **kwargs):
+        if 'year' in kwargs:
+            year = kwargs.get('year')
+        if 'month' in kwargs:
+            month = kwargs.get('month')
+        error = False
+        if not (year and month):
+            error = True
+        if not (year >= 1900 and year <= 2100):
+            error = True
+        try:
+            d1 = datetime.date(year, month, 1)
+        except:
+            error = True
+        if error:
+            kwargs['year'] = datetime.date.today().year
+            kwargs['month'] = datetime.date.today().month
+        return super().get(request, *args, **kwargs)
+
+class HomeView(CheckBaseView, TemplateView):
     template_name = 'pet_calendar/home.html'
 
     def get_context_data(self, **kwargs):
@@ -52,7 +73,7 @@ class TodayView(RedirectView):
         return reverse_lazy('pet_calendar:home', kwargs={'year':year, 'month':month})
 
 class BeforeMonthView(RedirectView):
-
+    
     def get_redirect_url(self, *args, **kwargs):
         year = kwargs.get('year')
         month = kwargs.get('month')
@@ -89,20 +110,25 @@ class DayListView(ListView):
         return query_set
 
 def ajax_get_birthday_pets(request):
+
     month = request.GET.get('month')
     day = request.GET.get('day')
     pets = Pets.objects.filter(birthday_month=month, birthday_day=day).all()
-    # MEDIA_URLをjsonに追加するのにうまい手がなさそうなので、
+    # pet.picture.urlをjsonに追加しなければいけないので、
     # model -> json string -> list -> add media_url -> json string というややこしいことをしている...
     pets_json = serialize('json', pets)
-    # pets.pictureには'/media/'が入ってない. html側でmedia表示するため、MEDIA_URLをjsonに追加
+    # pets.pictureには実際のmedia pathが入ってない. html側でmedia表示するため、pet.picture.urlのリストをjsonに追加する.
     pets_list = json.loads(pets_json)
     shuffle(pets_list)
-    dic = {'media_url': settings.MEDIA_URL}
-    for pet_dic in pets_list:
-        pet_dic.update(dic)
-
-    pets_json = json.dumps(pets_list)
+    # petのmodel本体は'pets_model'
+    pets_model_dic = {'pets_model':pets_list}
+    picture_url_dic = {}
+    for pet in pets:
+        picture_url_dic[pet.id] = pet.picture.url
+    # pet.picture.urlのリストは'pets_media_url'
+    pets_model_dic['pets_media_url'] =  picture_url_dic
+    
+    pets_json = json.dumps(pets_model_dic)
     return HttpResponse(pets_json, content_type='application/json')
 
     # pets = Pets.objects.filter(birthday_month=month, birthday_day=day).annotate(media_url=Value(settings.MEDIA_URL)).all()
