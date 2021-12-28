@@ -10,11 +10,11 @@ class RegistUserForm(forms.ModelForm):
     confirm_password = forms.CharField(label='パスワード再入力', widget=forms.PasswordInput(attrs={'class':'form-control'}))
 
     username = forms.CharField(label='飼い主様の苗字', widget=forms.TextInput(attrs={'class':'form-control'}))
-    zip_code = forms.CharField(label="郵便番号", widget=forms.TextInput(attrs={'placeholder': '1001000', 'class':'form-control'}))
-    address1 = forms.CharField(label="住所", widget=forms.TextInput(attrs={'class':'form-control'}))
+    zip_code = forms.CharField(label="郵便番号", required=False, widget=forms.TextInput(attrs={'placeholder': '1001000', 'class':'form-control'}))
+    address1 = forms.CharField(label="住所", required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
     address2 = forms.CharField(label="番地", required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
     address3 = forms.CharField(label="マンション・アパート名", required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
-    phone_number = forms.CharField(label="電話番号", widget=forms.TextInput(attrs={'placeholder': '090-0000-0000', 'class':'form-control'}))
+    phone_number = forms.CharField(label="電話番号", required=False, widget=forms.TextInput(attrs={'placeholder': '090-0000-0000', 'class':'form-control'}))
 
     field_order = ['username', 'email', 'password', 'confirm_password', 'zip_code', 'address1', 'address2', 'address3', 'phone_number']
 
@@ -45,11 +45,11 @@ class UserLoginForm(AuthenticationForm):
 class UpdateUserForm(forms.ModelForm):
 
     username = forms.CharField(label='飼い主様の苗字', widget=forms.TextInput(attrs={'class':'form-control'}))
-    zip_code = forms.CharField(label="郵便番号", widget=forms.TextInput(attrs={'placeholder': '1001000', 'class':'form-control'}))
-    address1 = forms.CharField(label="住所", widget=forms.TextInput(attrs={'class':'form-control'}))
+    zip_code = forms.CharField(label="郵便番号", required=False, widget=forms.TextInput(attrs={'placeholder': '1001000', 'class':'form-control'}))
+    address1 = forms.CharField(label="住所", required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
     address2 = forms.CharField(label="番地", required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
     address3 = forms.CharField(label="マンション・アパート名", required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
-    phone_number = forms.CharField(label="電話番号", widget=forms.TextInput(attrs={'placeholder': '090-0000-0000', 'class':'form-control'}))
+    phone_number = forms.CharField(label="電話番号", required=False, widget=forms.TextInput(attrs={'placeholder': '090-0000-0000', 'class':'form-control'}))
 
     class Meta:
         model = Users
