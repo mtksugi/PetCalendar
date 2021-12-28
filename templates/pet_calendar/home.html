@@ -6,9 +6,9 @@
 {% block content %}
 
 <div class="d-flex justify-content-between">
-    <a class="btn btn-secondary" href="{% url 'pet_calendar:before_month' year month %}" role="button">前月</a>
+    <a class="btn btn-primary" href="{% url 'pet_calendar:before_month' year month %}" role="button">前月</a>
     <div class="p-1">{{ year }}年{{ month }}月</div>
-    <a class="btn btn-secondary" href="{% url 'pet_calendar:next_month'  year month %}" role="button">翌月</a>
+    <a class="btn btn-primary" href="{% url 'pet_calendar:next_month'  year month %}" role="button">翌月</a>
 </div>
 <form method="GET" id="ajax-get-birthday-pets">
 <table class="table calendar">
@@ -86,7 +86,7 @@
                 return response.json();
             }).then(response => {
                 post_area.innerHTML = '';
-                for(const pet of response){
+                for(const pet of response.pets_model){
                     //card
                     const div_card = document.createElement('div');
                     div_card.className = "card mb-3";
@@ -99,7 +99,7 @@
                     div_col_1.className = "col-md-5";
                     const img_picture = document.createElement('img');
                     img_picture.className = "img-fluid rounded";
-                    img_picture.src = pet["media_url"] + pet.fields["picture"];
+                    img_picture.src = response.pets_media_url[pet["pk"]]
                     div_col_1.appendChild(img_picture);
                     div_row.appendChild(div_col_1);
                     //non picture
