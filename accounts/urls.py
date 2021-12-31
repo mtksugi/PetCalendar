@@ -16,6 +16,6 @@ urlpatterns = [
     path('regist_pet/', views.RegistPetView.as_view(), name='regist_pet'),
     path('update_pet/<int:pk>', views.UpdatePetView.as_view(), name='update_pet'),
     path('delete_pet/<int:pk>', views.DeletePetView.as_view(), name='delete_pet'),
-    path('search_address_by_postal_code/', views.search_address_by_postal_code, name='search_address_by_postal_code'),
+    # path('search_address_by_postal_code/', views.search_address_by_postal_code, name='search_address_by_postal_code'),
 ]
 

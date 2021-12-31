@@ -1,4 +1,4 @@
-from django.http.response import Http404
+from django.http.response import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django.views.generic.base import TemplateView
@@ -11,6 +11,8 @@ from .forms import EmailForm, RegistUserForm, ResetPasswordForm, UpdateUserForm,
 from .models import Pets, Users, UserActivateTokens
 from uuid import uuid4
 from datetime import datetime, timedelta, timezone
+import requests
+import json
 
 class RegistUserView(CreateView):
     template_name = 'accounts/regist_user.html'
@@ -191,6 +193,44 @@ class DeletePetView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         context['pet'] = self.object
         return context
 
+# def search_address_by_postal_code(request):
+
+#     url = 'https://maps.googleapis.com/maps/api/geocode/json?address=4440241&language=ja&components=country:JP&key=AIzaSyCe6GOiIEmo1bPA43d5idRcIq4pxCoDtsU'
+#     maps_response = requests.get(url)
+#     maps_response_json = json.loads(maps_response.text)
+
+#     administrative_area_level = [''] * 5
+#     locality = ''
+#     sublocality_level = [''] * 5
+#     for component in maps_response_json['results'][0]['address_components']:
+#         if 'administrative_area_level_1' in component['types']:
+#             administrative_area_level[0] = component['long_name']
+#         if 'administrative_area_level_2' in component['types']:
+#             administrative_area_level[1] = component['long_name']
+#         if 'administrative_area_level_3' in component['types']:
+#             administrative_area_level[2] = component['long_name']
+#         if 'administrative_area_level_4' in component['types']:
+#             administrative_area_level[3] = component['long_name']
+#         if 'administrative_area_level_5' in component['types']:
+#             administrative_area_level[4] = component['long_name']
+#         if 'locality' in component['types']:
+#             locality = component['long_name']
+#         if 'sublocality_level_1' in component['types']:
+#             sublocality_level[0] = component['long_name']
+#         if 'sublocality_level_2' in component['types']:
+#             sublocality_level[1] = component['long_name']
+#         if 'sublocality_level_3' in component['types']:
+#             sublocality_level[2] = component['long_name']
+#         if 'sublocality_level_4' in component['types']:
+#             sublocality_level[3] = component['long_name']
+#         if 'sublocality_level_5' in component['types']:
+#             sublocality_level[4] = component['long_name']
+
+#     address = ''.join(administrative_area_level) + locality + ''.join(sublocality_level)
+
+#     response = json.dumps({'address':address})
+
+#     return HttpResponse(response, content_type='application/json')
 
 def page_not_found(request, exception):
     return render(request, '404.html', status=404)

@@ -117,7 +117,7 @@ class Pets(models.Model):
     def __str__(self) -> str:
         return f'{self.user.username} : {self.name}'
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.birthday_month = self.birthday.month
         self.birthday_day = self.birthday.day
-        return super().save()
+        return super().save(*args, **kwargs)
