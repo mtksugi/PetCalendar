@@ -294,7 +294,7 @@ class FormUnitTest(SetUpBase, TestCase):
         self.assertFalse(form.is_valid())
 
 
-class ViewAndIntegrationTest(TestCase):
+class ViewAndIntegrationTests(TestCase):
     def test_registuserview(self):
         username = '会員　タロウ'
         email = 'user@mail.com'
