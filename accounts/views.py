@@ -13,6 +13,8 @@ from uuid import uuid4
 from datetime import datetime, timedelta, timezone
 import requests
 import json
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 class RegistUserView(CreateView):
     template_name = 'accounts/regist_user.html'
@@ -28,9 +30,21 @@ class RegistUserView(CreateView):
         # tokens = get_object_or_404(UserActivateTokens, user=form.instance)
 
         # ---- send mail
-        print(f'views : http://127.0.0.1:8000/accounts/activate_user/{tokens.token}')
-
-
+        subject = render_to_string('accounts/activate_user_mail_subject.txt')
+        message = render_to_string('accounts/activate_user_mail_message.txt', context={
+            'username':form.instance.username,
+            'url':self.request._current_scheme_host + reverse_lazy('accounts:activate_user', kwargs={'token':tokens.token}),
+        })
+        try:
+            send_mail(
+                subject,
+                message,
+                None,   # from addressはsettings.DEFAULT_FROM_EMAILから取得
+                [form.instance.email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            print('activate_user send_mail exception', e)
 
         return http_redirect
 
@@ -71,7 +85,21 @@ class ForgotPasswordView(FormView):
                 user=user, token=str(uuid4()), expired_at=datetime.now(tz=timezone.utc) + timedelta(days=1)
             )
             # ---- send mail
-            print(f'views : http://127.0.0.1:8000/accounts/reset_password/{tokens.token}')
+            subject = render_to_string('accounts/reset_password_mail_subject.txt')
+            message = render_to_string('accounts/reset_password_mail_message.txt', context={
+                'username':user.username,
+                'url':self.request._current_scheme_host + reverse_lazy('accounts:reset_password', kwargs={'token':tokens.token}),
+            })
+            try:
+                send_mail(
+                    subject,
+                    message,
+                    None,   # from addressはsettings.DEFAULT_FROM_EMAILから取得
+                    [user.email],
+                    fail_silently=False,
+                )
+            except Exception as e:
+                print('reset_password send_mail exception', e)
 
         return super().form_valid(form)
 

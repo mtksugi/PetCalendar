@@ -4,7 +4,6 @@ __pycache__/
 # Django stuff:
 *.log
 *.pyc
-local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
@@ -13,3 +12,4 @@ db.sqlite3-journal
 
 # Project stuff
 /media/
+.env
