@@ -8,6 +8,7 @@ charset-normalizer==2.0.9
 defusedxml==0.7.1
 diff-match-patch==20200713
 Django==3.2.10
+django-environ==0.8.1
 django-import-export==2.7.1
 django-mathfilters==1.0.0
 et-xmlfile==1.1.0
