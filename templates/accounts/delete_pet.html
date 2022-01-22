@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 {% block title %}ペット削除{% endblock %}
+{% block class1 %}center-container{% endblock %}
 {% block head1 %}ペット削除{% endblock %}
 {% block content %}
 <form method="POST">
    {% csrf_token %}
    <p> {{ pet.name }} ちゃんを削除しますか？ </p>
-   <div class="d-grid gap-1">
-      <input class="btn btn-danger" type="submit" value="削除する">
+   <div class="d-grid gap-1 mt-5">
+      <input class="btn btn-warning" type="submit" value="削除する">
    </div>
 </form>
+<div class="d-grid gap-1 mt-5">
+   <a class="btn btn-secondary" href="{% url 'accounts:list_pet' %}" role="button">ペット一覧に戻る</a>
+</div>
 {% endblock %}

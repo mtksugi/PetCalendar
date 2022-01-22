@@ -22,10 +22,19 @@ class RegistUserForm(forms.ModelForm):
         model = Users
         fields = ['username', 'email', 'password', 'zip_code', 'address1', 'address2', 'address3', 'phone_number']
     
-    def clean_confirm_password(self):
+    def clean_password(self):
         cleaned_data = super().clean()
         password = cleaned_data['password']
+        validate_password(password)
+        return password
+
+    def clean_confirm_password(self):
+        cleaned_data = super().clean()
         confirm_password = cleaned_data['confirm_password']
+        try:
+            password = cleaned_data['password']
+        except:
+            return confirm_password
         if password != confirm_password:
             raise forms.ValidationError('パスワードが一致しません')
         return confirm_password
@@ -74,10 +83,19 @@ class ResetPasswordForm(forms.ModelForm):
         model = Users
         fields = ['password', ]
 
-    def clean_confirm_password(self):
+    def clean_password(self):
         cleaned_data = super().clean()
         password = cleaned_data['password']
+        validate_password(password)
+        return password
+
+    def clean_confirm_password(self):
+        cleaned_data = super().clean()
         confirm_password = cleaned_data['confirm_password']
+        try:
+            password = cleaned_data['password']
+        except:
+            return confirm_password
         if password != confirm_password:
             raise forms.ValidationError('パスワードが一致しません')
         return confirm_password

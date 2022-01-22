@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load mathfilters %}
 {% load calendar_tags %} 
-{% block title %}ペットカレンダー{% endblock %}
-{% block head1 %}カレンダー{% endblock %}
+{% block title %}ファミリーカレンダー{% endblock %}
+{% block head1 %}ファミリーカレンダー{% endblock %}
 {% block content %}
 
-<div class="d-flex justify-content-between">
+<div class="d-flex justify-content-between mb-3">
     <a class="btn btn-primary" href="{% url 'pet_calendar:before_month' year month %}" role="button">前月</a>
     <div class="p-1">{{ year }}年{{ month }}月</div>
     <a class="btn btn-primary" href="{% url 'pet_calendar:next_month'  year month %}" role="button">翌月</a>

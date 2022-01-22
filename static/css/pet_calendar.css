@@ -1,3 +1,6 @@
+body {
+    background-image: url("/static/image/background_1500.jpg");
+}
 .card-text {
     white-space: pre;
 }
@@ -11,6 +14,8 @@
 .page-h1 {
     font-size: 1.25rem;
     border-bottom:1px solid  gray;
+    padding: 10px 0;
+    margin-bottom: 30px;
 }
 
 .calendar-tr {
@@ -39,4 +44,16 @@
 
 .calendar-sunday {
     color: red;
+}
+
+.center-container {
+    max-width: 540px;
+    margin: 10px auto;
+}
+
+.errorlist {
+    list-style-type: disc;
+    font-size: 0.8em;
+    font-style: italic;
+    color: rgba(255, 0, 0, 0.836);
 }
