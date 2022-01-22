@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}会員本登録結果{% endblock %}
+{% block class1 %}center-container{% endblock %}
 {% block head1 %}会員本登録結果{% endblock %}
 {% block content %}
 {% if error %}
@@ -12,7 +13,7 @@
 {% else %}
 <p>ユーザーの本登録が完了しました。</p>
 <p>ログインして、ペットの登録をお願いします。</p>
-
+<div class="d-block mb-5"></div>
 <div class="d-grid gap-1">
     <a class="btn btn-primary" href="{% url 'accounts:user_login' %}" role="button">ログイン</a>
 </div>

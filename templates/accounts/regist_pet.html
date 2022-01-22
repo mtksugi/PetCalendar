@@ -1,39 +1,39 @@
 {% extends 'base.html' %}
 {% block title %}ペット登録{% endblock %}
+{% block class1 %}center-container{% endblock %}
 {% block head1 %}ペット登録{% endblock %}
 {% block content %}
 <form method="POST" enctype="multipart/form-data">
    {% csrf_token %}
    <div class="mb-3">
-      {{ form.name.errors }}
       <label for="{{ form.name.id_for_label }}" class="form-label">ペットの名前</label>
       {{ form.name }}
    </div>
    <div class="mb-3">
-      {{ form.gender.errors }}
       <label for="{{ form.gender.id_for_label }}" class="form-label">性別</label>
       {{ form.gender }}
    </div>
    <div class="mb-3">
-      {{ form.birthday.errors }}
       <label for="{{ form.birthday.id_for_label }}" class="form-label">誕生日</label>
       {{ form.birthday }}
    </div>
    <div class="mb-3">
-      {{ form.picture.errors }}
       <label for="{{ form.picture.id_for_label }}" class="form-label">写真</label>
       {{ form.picture }}
    </div>
 
    <div class="mb-3">
-      {{ form.comment.errors }}
       <label for="{{ form.comment.id_for_label }}" class="form-label">アピールコメント</label>
       {{ form.comment }}
    </div>
    <div class="d-grid gap-1">
-      <input class="btn btn-primary mt-3" type="submit" value="登録する">
+      <input class="btn btn-primary mt-5" type="submit" value="登録する">
    </div>
 </form>
+
+<div class="d-grid gap-1 mt-5">
+   <a class="btn btn-secondary" href="{% url 'accounts:list_pet' %}" role="button">ペット一覧に戻る</a>
+</div>
 {% endblock %}
 
 {% block script %}
