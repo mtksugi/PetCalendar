@@ -54,7 +54,8 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = 'users'
-        verbose_name_plural = 'ユーザー'
+        verbose_name = '会員'
+        verbose_name_plural = '会員'
 
 class UserActivateTokensManager(models.Manager):
 
@@ -79,6 +80,7 @@ class UserActivateTokens(models.Model):
 
     class Meta:
         db_table = 'user_activate_tokens'
+        verbose_name = 'ユーザートークン'
         verbose_name_plural = 'ユーザートークン'
 
     def __str__(self) -> str:
@@ -111,6 +113,7 @@ class Pets(models.Model):
 
     class Meta:
         db_table = 'pets'
+        verbose_name = 'ペット'
         verbose_name_plural = 'ペット'
         ordering = ('user',)
 
