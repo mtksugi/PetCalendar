@@ -252,8 +252,9 @@ class FormUnitTest(SetUpBase, TestCase):
         userData = self.userData
         userData['password'] = userData['confirm_password']  = '1111'
         form = RegistUserForm(userData)
-        with self.assertRaises(ValidationError):
-            form.save()
+        # with self.assertRaises(ValidationError):
+        #     form.save()
+        self.assertFalse(form.is_valid())
 
     def test_emailform_valid(self):
         form = EmailForm(self.emailData[0])
@@ -264,10 +265,10 @@ class FormUnitTest(SetUpBase, TestCase):
         self.assertFalse(form.is_valid())
         # self.assertEqual(form.errors['email'], ['入力されたメールアドレスは会員登録されていません'])
 
-    def test_emailform_invalid_not_active(self):
-        form = EmailForm(self.emailData[2])
-        self.assertTrue(Users.objects.filter(email=self.emailData[2]['email']).exists())
-        self.assertFalse(form.is_valid())
+    # def test_emailform_invalid_not_active(self):
+    #     form = EmailForm(self.emailData[2])
+    #     self.assertTrue(Users.objects.filter(email=self.emailData[2]['email']).exists())
+    #     self.assertFalse(form.is_valid())
 
     def test_resetpasswordform_valid(self):
         form = ResetPasswordForm(self.resetPasswordData[0])
@@ -280,8 +281,9 @@ class FormUnitTest(SetUpBase, TestCase):
     def test_resetpasswordform_invalid_simple_password(self):
         form = ResetPasswordForm(self.resetPasswordData[2])
         form.user = self.user
-        with self.assertRaises(ValidationError):
-            form.save()
+        # with self.assertRaises(ValidationError):
+        #     form.save()
+        self.assertFalse(form.is_valid())
 
     def test_registpetform_valid(self):
         form = RegistPetForm(self.petData, self.petFileData)
@@ -411,6 +413,30 @@ class ViewAndIntegrationTests(TestCase):
         # login check
         self.assertTrue(self.client.login(username=user.email, password=password))
     
+    def test_from_past_token_to_resetpassword(self):
+        # no activate, past token
+        self.test_activateuserview_past_token()
+        user = Users.objects.get(id=1)
+        self.assertFalse(user.is_active)
+        # request forgot password
+        response = self.client.post(reverse('accounts:forgot_password'), {'email':user.email,})
+        self.assertEqual(response.status_code, 302)
+        # reset password
+        token = UserActivateTokens.objects.filter(user=user, expired_at__gte=datetime.now(tz=timezone.utc)).first()
+        password = 'test_from_past_token_to_resetpassword1234'
+        input_data = {
+            'password':password,
+            'confirm_password':password,
+            'token':token.token
+        }
+        response = self.client.post(reverse('accounts:reset_password', kwargs={'token':token.token}), input_data)
+        self.assertEqual(response.status_code, 302)
+        user = Users.objects.get(id=1)
+        # is_active
+        self.assertTrue(user.is_active)
+        # login check
+        self.assertTrue(self.client.login(username=user.email, password=password))
+
     def test_updateuserview_valid(self):
         self.test_activateuserview_valid()
         username = '会員　タロウ　修正'

@@ -4,10 +4,7 @@
 {% block class1 %}center-container{% endblock %}
 {% block head1 %}登録ペット一覧{% endblock %}
 {% block content %}
-<div class="d-flex justify-content-between">
-  <a class="btn btn-primary mb-4" href="{% url 'accounts:regist_pet' %}" role="button">ペットを追加する</a>
-  <a class="btn btn-secondary mb-4" href="{% url 'pet_calendar:home' %}" role="button">カレンダーに戻る</a>
-</div>
+
 <div>
 
 {% for object in object_list %}
@@ -36,5 +33,12 @@
 
 {% endfor %}
 
+</div>
+<div class="d-grid gap-1 mt-4">
+  <a class="btn btn-primary" href="{% url 'accounts:regist_pet' %}" role="button">ペットを追加する</a>
+</div>
+
+<div class="d-grid gap-1 mt-5">
+  <a class="btn btn-secondary" href="{% url 'pet_calendar:home' %}" role="button">カレンダーに戻る</a>
 </div>
 {% endblock %}

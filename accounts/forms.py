@@ -70,7 +70,7 @@ class EmailForm(forms.Form):
     def clean_email(self):
         cleaned_data = super().clean()
         email = cleaned_data['email']
-        if not Users.objects.filter(email=email, is_active=True).exists():
+        if not Users.objects.filter(email=email).exists():  # is_activeはactivateしなかったユーザはリセットパスワードで再アクティブ化するために条件に入れない
             raise forms.ValidationError('入力されたメールアドレスは会員登録されていません')
         return email
 
@@ -105,6 +105,8 @@ class ResetPasswordForm(forms.ModelForm):
         user = self.user
         validate_password(self.cleaned_data['password'], user)
         user.set_password(self.cleaned_data['password'])
+        if not user.is_active:
+            user.is_active = True
         user.save()
         return user
 

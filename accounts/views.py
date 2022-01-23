@@ -80,7 +80,7 @@ class ForgotPasswordView(FormView):
     def form_valid(self, form):
         email = form.cleaned_data['email']
         if email:
-            user = get_object_or_404(Users, email=email, is_active=True)    # 存在チェックはform側で実施済
+            user = get_object_or_404(Users, email=email)    # 存在チェックはform側で実施済. is_activeはactivateしなかったユーザはリセットパスワードで再アクティブ化するために条件に入れない
             tokens = UserActivateTokens.objects.create(
                 user=user, token=str(uuid4()), expired_at=datetime.now(tz=timezone.utc) + timedelta(days=1)
             )
