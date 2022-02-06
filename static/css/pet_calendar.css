@@ -32,6 +32,17 @@ body {
 .regist-img {
     display: flex;
     justify-content: center;
+    animation: 4s bound 1s ease infinite;
+}
+@keyframes bound {
+    from { transform: scale(1); }
+    5% { transform: scale(1); }
+    10% { transform: scale(1.15); }
+    15% { transform: scale(0.95); }
+    20% { transform: scale(1.5); }
+    25% { transform: scale(0.80); }
+    30% { transform: scale(1); }
+    to { transform: scale(1); }
 }
 
 .birthday-pets-area {
