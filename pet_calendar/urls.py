@@ -3,6 +3,7 @@ from . import views
 app_name = 'pet_calendar'
 
 urlpatterns = [
+    path('', views.TodayView.as_view(), name='top'),
     path('home/', views.TodayView.as_view(), name='home'),
     path('home/<int:year>/<int:month>', views.HomeView.as_view(), name='home'),
     path('next_month/<int:year>/<int:month>', views.NextMonthView.as_view(), name='next_month'),
