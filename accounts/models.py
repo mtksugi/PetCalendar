@@ -1,3 +1,4 @@
+from dataclasses import fields
 from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser, PermissionsMixin
@@ -116,6 +117,7 @@ class Pets(models.Model):
         verbose_name = 'ペット'
         verbose_name_plural = 'ペット'
         ordering = ('user',)
+        indexes = [models.Index(fields=['birthday_month'])]
 
     def __str__(self) -> str:
         return f'{self.user.username} : {self.name}'
