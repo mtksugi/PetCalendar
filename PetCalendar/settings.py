@@ -172,8 +172,8 @@ DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='admin@localhost')
 
 # for S3 buckets
 
-DEFAULT_FILE_STORAGE = env('DEFAULT_FILE_STORAGE', default='django.core.files.storage.FileSystemStorage')
-STATICFILES_STORAGE = env('STATICFILES_STORAGE', default='django.contrib.staticfiles.storage.StaticFilesStorage')
+DEFAULT_FILE_STORAGE = env('DEFAULT_FILE_STORAGE', default='django.core.files.storage.FileSystemStorage')   # S3の場合は PetCalendar.custom_storage.MediaStorage
+STATICFILES_STORAGE = env('STATICFILES_STORAGE', default='django.contrib.staticfiles.storage.StaticFilesStorage')   # S3の場合は storages.backends.s3boto3.S3StaticStorage
 AWS_S3_ACCESS_KEY_ID = env('AWS_S3_ACCESS_KEY_ID', default='')
 AWS_S3_SECRET_ACCESS_KEY = env('AWS_S3_SECRET_ACCESS_KEY', default='')
 AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='')
