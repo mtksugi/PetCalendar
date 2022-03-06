@@ -485,7 +485,7 @@ class ViewAndIntegrationTests(TestCase):
         self.assertEqual(pet.gender, gender)
         self.assertEqual(pet.birthday, birthday.date())
         self.assertEqual(pet.comment, comment)
-        self.assertRegex(pet.picture.url, '^/media/pet/test.*\.jpg$')
+        self.assertRegex(pet.picture.url, '/media/pet/test.*\.jpg$')
 
     def test_listpetview_valid(self):
         self.test_registpetview_valid()
@@ -552,7 +552,7 @@ class ViewAndIntegrationTests(TestCase):
         self.assertEqual(pet.gender, gender)
         self.assertEqual(pet.birthday, birthday)
         self.assertEqual(pet.comment, comment)
-        self.assertRegex(pet.picture.url, '^/media/pet/updatetest.*\.jpg$')
+        self.assertRegex(pet.picture.url, '/media/pet/updatetest.*\.jpg$')
         
     def test_deletepetview_valid(self):
         self.test_registpetview_valid()

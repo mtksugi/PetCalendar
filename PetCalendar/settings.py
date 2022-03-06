@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'pet_calendar',
     'mathfilters',
     'import_export',
+    'storages',
 ]
 
 AUTH_USER_MODEL = 'accounts.Users'
@@ -168,3 +169,13 @@ EMAIL_CONFIG = env.email(
 vars().update(EMAIL_CONFIG)
 EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='admin@localhost')
+
+# for S3 buckets
+
+DEFAULT_FILE_STORAGE = env('DEFAULT_FILE_STORAGE', default='django.core.files.storage.FileSystemStorage')
+STATICFILES_STORAGE = env('STATICFILES_STORAGE', default='django.contrib.staticfiles.storage.StaticFilesStorage')
+AWS_S3_ACCESS_KEY_ID = env('AWS_S3_ACCESS_KEY_ID', default='')
+AWS_S3_SECRET_ACCESS_KEY = env('AWS_S3_SECRET_ACCESS_KEY', default='')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='')
+AWS_LOCATION = 'static'
+AWS_QUERYSTRING_AUTH = False
