@@ -148,6 +148,10 @@ STATIC_ROOT = env('STATIC_ROOT', default='')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# global settings
+
+UPLOAD_FILE_SIZE_LIMIT = 10 * 1024 * 1024   # 10M
+
 # Django authentication system settings
 
 LOGIN_URL = '/accounts/user_login'
