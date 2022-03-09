@@ -8,6 +8,8 @@ from uuid import uuid4
 from datetime import datetime, timedelta, timezone, date
 from .forms import EmailForm, RegistPetForm, RegistUserForm, ResetPasswordForm
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
+import os
 
 class SetUpBase(TestCase):
 
@@ -225,8 +227,9 @@ class FormUnitTest(SetUpBase, TestCase):
             'birthday':datetime.now(tz=timezone.utc),
             'comment':'がんばります！'
         }
+        image_test_file = os.path.join(settings.STATIC_DIR, 'image', 'logo-mini.png')
         petFileData = {
-            'picture':SimpleUploadedFile('test.jpg', b"file data", content_type="image/jpeg"),
+            'picture':SimpleUploadedFile(name='test.jpg', content=open(image_test_file, 'rb').read(), content_type='image/jpeg')
         }
 
         self.userData = userData
@@ -457,12 +460,13 @@ class ViewAndIntegrationTests(TestCase):
         gender = 2
         birthday = datetime.now(tz=timezone.utc) - timedelta(days=1000)
         comment = 'コメント\nコメント'
+        image_test_file = os.path.join(settings.STATIC_DIR, 'image', 'logo-mini.png')
         input_data = {
             'name':name,
             'gender':gender,
             'birthday':birthday.date(),
             'comment':comment,
-            'picture':SimpleUploadedFile('test.jpg', b"file data", content_type="image/jpeg"),
+            'picture':SimpleUploadedFile(name='test.jpg', content=open(image_test_file, 'rb').read(), content_type='image/jpeg')
         }
         # user data
         email = 'user@mail.com'
@@ -526,12 +530,13 @@ class ViewAndIntegrationTests(TestCase):
         birthday = date(2021, 8, 4)
         picture_file = 'updatetest.jpg'
         comment = 'コメント\nコメント更新'
+        image_test_file = os.path.join(settings.STATIC_DIR, 'image', 'logo-mini.png')
         input_data = {
             'name':name,
             'gender':gender,
             'birthday':birthday,
             'comment':comment,
-            'picture':SimpleUploadedFile(picture_file, b"file data", content_type="image/jpeg"),
+            'picture':SimpleUploadedFile(name=picture_file, content=open(image_test_file, 'rb').read(), content_type='image/jpeg')
         }
 
         self.test_registpetview_valid()

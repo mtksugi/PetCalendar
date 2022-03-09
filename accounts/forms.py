@@ -3,6 +3,7 @@ from .models import Pets, Users
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.forms import AuthenticationForm
 import datetime
+from django.conf import settings
 
 class RegistUserForm(forms.ModelForm):
     email = forms.EmailField(label='メールアドレス', widget=forms.EmailInput(attrs={'class':'form-control'}))
@@ -116,7 +117,7 @@ class RegistPetForm(forms.ModelForm):
         (1, 'オス'), (2, 'メス'), (3, '不明')
     ), widget=forms.Select(attrs={'class':'form-select'}))
     birthday = forms.DateField(label="誕生日", widget=forms.TextInput(attrs={'type':'date', 'class':'form-control'}))
-    picture = forms.FileField(label="写真", widget=forms.FileInput(attrs={'class':'form-control'}))
+    picture = forms.ImageField(label="写真", widget=forms.FileInput(attrs={'class':'form-control'}))
     comment = forms.CharField(max_length=1000, label="アピールコメント", widget=forms.Textarea(attrs={'class':'form-control','rows':'3'}))
 
     class Meta:
@@ -129,6 +130,13 @@ class RegistPetForm(forms.ModelForm):
         if birthday > datetime.date.today():
             raise forms.ValidationError('誕生日が未来日です')
         return birthday
+
+    def clean_picture(self):
+        cleaned_data = super().clean()
+        picture = cleaned_data['picture']
+        if picture.size > settings.UPLOAD_FILE_SIZE_LIMIT:
+            raise forms.ValidationError('写真のファイルサイズが大きすぎます')
+        return picture
 
     def save(self):
         pet = super().save(commit=False)
